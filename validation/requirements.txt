@@ -1,0 +1,5 @@
+# Environment of record (versions printed in console-log-verification.txt)
+numpy
+scipy
+pandas
+camb==1.6.6   # required only for camb_checks.py (stretch goal)

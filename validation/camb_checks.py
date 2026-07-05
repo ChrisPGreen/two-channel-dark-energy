@@ -1,0 +1,56 @@
+#!/usr/bin/env python3
+"""
+camb_checks.py — perturbation-level checks (STRETCH GOAL; run reproduce.py first).
+Reproduces: (a) background validation vs CAMB (0.01% target), (b) CMB TT differences
+(+0.4% max at ell 2-10, 0.06% acoustic), (c) fsigma8 (<=2%), (d) low-ell cutoff spectra
+(D2 -> 79%/D3 -> 95% for lambda_max = 2*pi*R_s ; ~35% shelf through ell~5 for 2*R_s).
+Environment of record: camb==1.6.6. Best-fit params from reproduce.py full vector.
+"""
+import numpy as np, camb
+from camb.dark_energy import DarkEnergyPPF
+from reproduce import build_rho, Ob_h2   # reuse the exact ODE integrator
+
+Om, H0 = 0.313, 67.8                     # full-vector best fit (see console log)
+mu0, n, kap = 0.37, 1.78, 0.85
+As, ns, tau = 2.1e-9, 0.965, 0.054
+Rs_Mpc = 1.66e26/3.086e22                # parent horizon today, comoving (5379 Mpc)
+
+# --- tabulate w_eff(a) from Eq.(3); cap w at -15 where Omega_DE < 1e-9 (integrator hygiene,
+#     verified to leave all background observables unchanged) ---
+rint = build_rho(mu0, n, kap)
+xa = np.linspace(-9.2, 0, 1200)
+rho = np.array([float(rint(x)) for x in xa])
+w = -1 - np.gradient(np.log(rho), xa)/3
+a_tab = np.concatenate([[1e-6], np.exp(xa)]); w_tab = np.maximum(np.concatenate([[-1.0], w]), -15.0)
+
+def make_pars(model, lmax=2200, cutoff_k=None):
+    p = camb.set_params(H0=H0, ombh2=Ob_h2, omch2=Om*(H0/100)**2-Ob_h2, mnu=0.0, omk=0,
+                        As=As, ns=ns, tau=tau)
+    if model == 'C':
+        p.DarkEnergy = DarkEnergyPPF(); p.DarkEnergy.set_w_a_table(a_tab, w_tab)
+    elif model == 'w0wa':
+        p.DarkEnergy = DarkEnergyPPF(); p.DarkEnergy.set_params(w=-0.84, wa=-0.64)
+    if cutoff_k is not None:
+        ks = np.logspace(-6.5, 1.0, 3000); pk = As*(ks/0.05)**(ns-1)
+        pk[ks < cutoff_k] = 1e-30*As      # hard primordial cutoff
+        p.set_initial_power_table(ks, pk)
+    p.set_for_lmax(lmax)
+    p.set_matter_power(redshifts=[1.48, 1.0, 0.61, 0.51, 0.38, 0.0], kmax=2.0, silent=True)
+    return p
+
+out = {}
+for m in ['LCDM', 'C', 'w0wa']:
+    r = camb.get_results(make_pars(m))
+    out[m] = dict(cl=r.get_cmb_power_spectra(CMB_unit='muK')['total'][:, 0],
+                  fs8=r.get_fsigma8(), th=r.get_derived_params()['thetastar'])
+print("theta* x100:", {m: round(100*out[m]['th'], 4) for m in out})
+for lo, hi, lab in [(2, 10, 'ell 2-10 (ISW)'), (200, 1500, 'acoustic')]:
+    s = slice(lo, hi+1)
+    print(f"{lab}: C vs LCDM {100*np.mean(out['C']['cl'][s]/out['LCDM']['cl'][s]-1):+.2f}%")
+print("fsigma8 C vs LCDM max |diff|:",
+      f"{100*np.max(np.abs(out['C']['fs8']/out['LCDM']['fs8']-1)):.2f}%")
+
+base = camb.get_results(make_pars('C', lmax=300)).get_cmb_power_spectra(CMB_unit='muK')['total'][:, 0]
+for kcut, lab in [(1.0/Rs_Mpc, 'lambda_max=2piRs'), (np.pi/Rs_Mpc, 'lambda_max=2Rs')]:
+    cut = camb.get_results(make_pars('C', lmax=300, cutoff_k=kcut)).get_cmb_power_spectra(CMB_unit='muK')['total'][:, 0]
+    print(lab, "D_ell ratios ell=2,3,5,7,10:", [round(float(cut[l]/base[l]), 2) for l in (2, 3, 5, 7, 10)])
