@@ -1,4 +1,5 @@
 # A Two-Channel Accretion Mechanism for Evolving Dark Energy
+Archived at Zenodo: https://doi.org/10.5281/zenodo.21206147
 
 Christopher P. Green — Independent Researcher — research@wilson-green.com
 
