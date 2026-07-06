@@ -1,0 +1,48 @@
+python reproduce.py full
+downloading cache/pantheon.dat ...
+downloading cache/pantheon.cov ...
+SN likelihood: 1580 SNe (expect 1580), full STAT+SYS covariance
+
+=== MODE: full ===  (targets: cons 17.6 / 12.9 / 13.9 ; full 1409.4 / 1403.4 / 1403.3)
+ cons_LCDM: chi2 =    17.62   params = [ 0.3077 68.0763]
+ cons_w0wa: chi2 =    12.85   params = [ 0.3733 62.2255 -0.1895 -2.4536]
+reproduce.py:110: IntegrationWarning: The occurrence of roundoff error is detected, which prevents
+  the requested tolerance from being achieved.  The error may be
+  underestimated.
+  DCs = quad(lambda z: c/Hz(z), 0, z_star, limit=60)[0]
+reproduce.py:114: IntegrationWarning: The maximum number of subdivisions (50) has been achieved.
+  If increasing the limit yields no improvement it is advised to analyze
+  the integrand in order to determine the difficulties.  If the position of a
+  local difficulty can be determined (singularity, discontinuity) one will
+  probably gain from splitting up the interval and calling the integrator
+  on the subranges.  Perhaps a special-purpose integrator should be used.
+  DCz = quad(lambda zz: c/Hz(zz), 0, z, limit=50)[0]
+reproduce.py:114: IntegrationWarning: The occurrence of roundoff error is detected, which prevents
+  the requested tolerance from being achieved.  The error may be
+  underestimated.
+  DCz = quad(lambda zz: c/Hz(zz), 0, z, limit=50)[0]
+reproduce.py:110: IntegrationWarning: The maximum number of subdivisions (60) has been achieved.
+  If increasing the limit yields no improvement it is advised to analyze
+  the integrand in order to determine the difficulties.  If the position of a
+  local difficulty can be determined (singularity, discontinuity) one will
+  probably gain from splitting up the interval and calling the integrator
+  on the subranges.  Perhaps a special-purpose integrator should be used.
+  DCs = quad(lambda z: c/Hz(z), 0, z_star, limit=60)[0]
+    cons_C: chi2 =    13.89   params = [ 0.3347 65.6008  1.1531  2.3692  1.0063]
+ full_LCDM: chi2 =  1409.38   params = [ 0.3111 67.848 ]
+ full_w0wa: chi2 =  1403.40   params = [ 0.3132 67.7295 -0.8354 -0.639 ]
+    full_C: chi2 =  1403.26   params = [ 0.313  67.7826  0.3749  1.7807  0.8508]
+
+shape: w_eff(z=1) = -1.141, w_eff(0) = -0.858, crossing z = 0.400, rho peak z = 0.406
+
+kappa profile (conservative vector, other params re-optimised):
+  kappa = 0.5: chi2 =   16.2
+  kappa = 1.0: chi2 =   13.8
+  kappa = 3.0: chi2 =   17.2
+
+allowed thawing model mu0=0.2: chi2 = 17.5 (LCDM baseline 17.6)
+
+allowed thawing model mu0=0.35: chi2 = 17.5 (LCDM baseline 17.6)
+w0wa fit to kappa=0 mock: w0 = -0.97, wa = -0.05, implied SPURIOUS crossing z = 1.21
+
+done. Compare against targets in VALIDATION-README.md (pass tolerances stated there).
