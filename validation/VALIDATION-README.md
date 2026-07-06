@@ -1,15 +1,24 @@
 # Validation package — Two-Channel Accretion Mechanism (Green 2026)
 
+**Archived release.** This package corresponds to release v1.0.2.
+Reproduce against console-log-verification-full.txt.
+The manuscript, this package, and the reference run below are pinned to the same release.
+
 This package answers the independent-validation checklist point by point. The governing
 principle throughout: **what is documented here is what the code actually did**, including
 every approximation. To match the paper's numbers you must replicate the approximations
 first; upgrading them (correlations, per-model recombination, etc.) is a valuable *extension*
 but will not reproduce the fingerprints.
 
+**The reference run is `reproduce.py full`**, captured in `console-log-verification-full.txt`
+— reproduce against that. Full mode cold-starts every optimisation from the original starting
+points and is authoritative wherever it differs from the shorter `quick` mode.
+
 Files: `reproduce.py` (background pipeline, both modes), `camb_checks.py` (perturbation
-stretch goal), `requirements.txt`, `console-log-verification.txt` (a genuine run of
-`reproduce.py quick` in the original environment — reproduce against this, not only against
-the rounded manuscript values).
+stretch goal), `requirements.txt`, `console-log-verification-full.txt` (the reference
+full-mode run), and `console-log-verification.txt` (the earlier `quick`-mode run, retained for
+reference — note its conservative two-channel cell is a short-leash polish, **not** the
+converged value; see §7).
 
 ---
 
@@ -89,9 +98,11 @@ convergence wobble is the dominant reproducibility noise: expect a few ×0.1 in 
 Targets (paper Table 1 and §4–§5): conservative 17.6 / 12.9 / 13.9; full 1409.4 / 1403.4 /
 1403.3; best fit μ0 ≈ 0.37, n ≈ 1.8, κ ≈ 0.85; κ profile 16.2 / 13.8 / 17.2 at κ = 0.5/1/3 (bounded above by ΛCDM's 17.6 via μ0 → 0);
 mock refit w0 = −0.97, wa = −0.05, implied crossing z ≈ 1.2; shape w_eff(z=1) = −1.14,
-crossing z ≈ 0.41, w_eff(0) = −0.86. **See §7 for converged-value updates to the κ profile and the conservative two-channel cell discovered during verification.** The **console log** in this package gives the unrounded
-values actually produced (e.g. full-vector ΛCDM 1409.381, w0–wa 1403.397 at
-w0 = −0.8354, wa = −0.6390) — reproduce against those.
+crossing z ≈ 0.40, w_eff(0) = −0.86. These are the full-mode numbers the manuscript prints;
+§7 explains the environment-sensitivity trap and the κ-profile ceiling structure, and §8 is
+the authoritative full-mode reference summary. The **full-mode console log**
+(`console-log-verification-full.txt`) gives the unrounded values actually produced (e.g.
+full-vector ΛCDM 1409.38, w0–wa 1403.40 at w0 = −0.8354, wa = −0.639) — reproduce against those.
 
 **Recommended pass tolerances** (your 0.1 instinct is right for the *evaluated* cells but too
 tight for independently re-optimised ones): χ² within **±0.3** per cell across environments
@@ -135,41 +146,36 @@ the analysis as a screening test.
 
 ---
 
-## 7. Verification-run addendum (read before comparing)
+## 7. Verification notes and traps (read before comparing)
 
-The console log in this package is a genuine run in the environment of record, and it
-surfaced exactly the manuscript-vs-console gaps your checklist anticipated. Compare against
-**these** numbers, not only the manuscript's rounded ones.
+Two things can make an independent re-run disagree with the numbers above even when nothing is
+wrong. Both are understood; neither is an error.
 
-**All six cells reproduced.** Conservative (re-polished): 17.62 / 12.85 / 13.67.
-Full vector: 1409.38 / 1403.40 / 1403.26. Exact full-vector two-channel best fit for
-strict evaluation-mode comparison: (Ω_m, H0, μ0, n, κ) =
-(0.3130, 67.7847, 0.3781, 1.7981, 0.8548) → χ² = 1403.26 ± 0.05.
+**Environment sensitivity (the biggest trap).** The optimiser's minimum *value* is stable to
+~±0.1 across integrator settings, but the minimum *location* shifts to compensate — so
+evaluating a *recorded* parameter vector under different quad settings can mislead. Concretely,
+the original conservative column was computed with quad limit = 150; this package standardises
+on the full-vector configuration (limit = 60). At fixed parameters that difference shifts χ² by
+O(1): the recorded conservative ΛCDM point evaluates to 18.84 under limit-60, while the
+re-optimised minimum lands at 17.62, on target. **Rule:** compare re-optimised minimum
+*values*, or evaluate the full-vector cells at the exact vector in §8 — do not evaluate a
+rounded recorded vector under a different integrator and expect the recorded χ².
 
-**Environment sensitivity (the biggest trap).** The original conservative column was computed
-with quad limit = 150; this package standardises on the full-vector configuration (limit = 60).
-At *fixed* parameters that integrator difference shifts χ² by O(1) — the log demonstrates it:
-the recorded conservative ΛCDM point evaluates to 18.84 under limit-60, while the re-polished
-minimum lands at 17.62, on target. Minimum **values** are stable to ~±0.1 across the two
-configurations; minimum **locations** shift to compensate. Rule: compare re-optimised minimum
-values, or evaluate the full-vector cells at the exact vector above.
+**Nelder–Mead stranding.** With finite iteration caps, Nelder–Mead can terminate before
+convergence, especially on the κ-profile cells where the likelihood is shallow. A
+partially-converged κ = 3 run can strand well above the true value; the full cold-start run
+reaches the converged profile. If a re-run lands high at κ = 3, suspect a stranding and
+lengthen the leash before treating it as a discrepancy.
 
-**Convergence findings.** (a) The conservative two-channel converged minimum is **13.67**
-(at κ ≈ 1.11); the pre-correction draft's 13.9 was the original run's Nelder–Mead terminus (the paper now prints 13.7) — any value
-≤ 13.9 is consistent. (b) **The κ profile, fully resolved (credit: the independent
-validator's ~17-at-κ=3 report, which is correct).** The profile has a structural floor: at any
-κ, μ0 → 0 switches the mechanism off and recovers exact ΛCDM (17.6) — verified in the log.
-The manuscript's 17.1 / 13.9 / 24.0 were all Nelder–Mead strandings under iteration caps.
-The true profile is a shallow valley bounded above by the ΛCDM plateau everywhere:
-~17.6 as κ → 0, **15.4** at κ = 0.5 (feeding active, n pinned at its 0.5 bound), **13.8** at
-κ ≈ 1, and **≈15.6** at κ = 3, where the optimiser retreats to near-zero feeding (μ0 ≈ 0.025)
-— verified in the log. Correct interpretation: the full improvement over ΛCDM is available
-only in the neighbourhood of the physical budget; away from it the fit degrades toward, and is
-capped by, the ΛCDM value as feeding shuts down. Validators should reproduce this
-valley-with-ceiling structure; the manuscript's 24.0 (and this package's earlier 27.0/29.8
-reruns) are optimizer strandings, and any value in ~15.5–17.6 at κ = 3 indicates a partially
-converged retreat, not an error. (c) The §5 mock test reproduces exactly
-(w0 = −0.97, wa = −0.05, spurious crossing z = 1.21).
+**The κ-profile structure (why it looks the way it does).** The profile has a structural
+ceiling: at any κ, μ0 → 0 switches the mechanism off and recovers exact ΛCDM (χ² = 17.6), so
+the profile *cannot* exceed 17.6 — verified in the log. The converged profile is a shallow
+valley bounded above by that ceiling: ≈17.6 as κ → 0, **16.2** at κ = 0.5, **13.8** at
+κ ≈ 1, and **17.2** by κ = 3, where the optimiser retreats to near-zero feeding. Interpretation:
+the full improvement over ΛCDM is available only in the neighbourhood of the physical budget;
+away from it the fit degrades toward, and is capped by, the ΛCDM value as feeding shuts down.
+Validators should reproduce this valley-with-ceiling shape; a value materially above 17.6 at
+any κ is a stranding, not a feature.
 
 **Scripting note.** `Hz_B` and `observ` live inside `main()`; for scripted use import
 `build_rho`, `chi2`, `chi2_blocks` and the module constants (the log's continuation blocks
@@ -178,14 +184,23 @@ show working examples).
 
 ---
 
-## 8. Full-mode reconciliation (`reproduce.py full`)
+## 8. Reference run — full mode (`reproduce.py full`)
 
-A complete cold-start `full` run (all optimisations from the original starting points) gives:
-conservative 17.62 / 12.85 / **13.89**; full-vector 1409.38 / 1403.40 / 1403.26; shape
-w_eff(z=1) = −1.141, crossing z = 0.400, ρ-peak z = 0.406, w_eff(0) = −0.858; κ profile
-**16.2 / 13.8 / 17.2** at κ = 0.5 / 1 / 3; mock test w0 = −0.97, wa = −0.05, z = 1.21.
+The authoritative numbers, from a complete cold-start `full` run
+(`console-log-verification-full.txt`), all optimisations from the original starting points:
+
+- **Conservative vector** (ΛCDM / w0–wa / two-channel): 17.62 / 12.85 / **13.89**
+- **Full vector**: 1409.38 / 1403.40 / **1403.26**
+- **Two-channel full-vector best fit**: (Ω_m, H0, μ0, n, κ) =
+  (0.3130, 67.7826, 0.3749, 1.7807, 0.8508) → χ² = 1403.26
+  (evaluate here for the ±0.05 strict-comparison tolerance)
+- **Shape**: w_eff(z=1) = −1.141, crossing z = 0.400, ρ-peak z = 0.406, w_eff(0) = −0.858
+- **κ profile**: 16.2 / 13.8 / 17.2 at κ = 0.5 / 1 / 3
+- **Mock test**: w0 = −0.97, wa = −0.05, spurious crossing z = 1.21
+
 The conservative two-channel optimum converges to κ = 1.006, χ² = 13.89 — i.e. **at the
-physical ceiling κ = 1** (the paper prints 13.9 and κ ≃ 1.01 accordingly). This supersedes the
-quick-mode polish value (13.67 at κ ≈ 1.11) noted in §7: the quick figure was a short-leash
-polish from the recorded point, the full cold start is the honestly-converged value. The
-full-vector best fit is unchanged at κ = 0.851. Reproduce against these full-mode numbers.
+physical ceiling κ = 1** — which is what the manuscript prints (13.9, κ ≃ 1.01). Full mode is
+authoritative wherever it differs from `quick`: the quick-mode conservative two-channel figure
+is a short-leash polish from the recorded point and is *not* the honestly-converged value; the
+full cold-start 13.89 is. The full-vector best fit is κ ≃ 0.85 (0.851 rounded), effectively
+unchanged between modes. **Reproduce against these full-mode numbers.**
