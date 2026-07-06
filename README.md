@@ -23,15 +23,16 @@ the physical energy budget (kappa ~ 0.85).
   - `camb_checks.py` — perturbation-level checks via CAMB 1.6.6 (PPF, tabulated w(a)).
   - `VALIDATION-README.md` — exact data provenance, every approximation disclosed,
     optimizer settings, target numbers, pass tolerances.
-  - `console-log-verification.txt` — genuine run in the environment of record.
+  - `console-log-verification-full.txt` — reference full-mode run.
+  - `console-log-verification.txt` — earlier quick-mode run.
   - `requirements.txt`
 
 ## Reproducing the headline numbers
 
     pip install -r validation/requirements.txt
-    python3 validation/reproduce.py quick
+    python3 validation/reproduce.py full
 
-Targets: chi2 = 17.6 / 12.9 / 13.7 (Planck priors + DESI BAO) and
+Targets: chi2 = 17.6 / 12.9 / 13.9 (Planck priors + DESI BAO) and
 1409.4 / 1403.4 / 1403.3 (adding 1580 Pantheon+ SNe); crossing z ≈ 0.40;
 kappa ≈ 0.85. See VALIDATION-README.md for tolerances before flagging discrepancies.
 
