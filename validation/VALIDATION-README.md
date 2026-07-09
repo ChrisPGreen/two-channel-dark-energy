@@ -146,7 +146,7 @@ the authoritative full-mode reference summary. The **full-mode console log**
 (`log-reproduce-dr1-full.txt`) gives the unrounded values actually produced (e.g.
 full-vector ΛCDM 1409.38, w0–wa 1403.40 at w0 = −0.8354, wa = −0.639) — reproduce against those.
 
-**Recommended pass tolerances** (your 0.1 instinct is right for the *evaluated* cells but too
+**Recommended pass tolerances** (a ±0.1 band suits the *evaluated* cells but is too
 tight for independently re-optimised ones): χ² within **±0.3** per cell across environments
 (quad tolerances + NM wobble); if you evaluate at the console-log parameter vectors rather
 than re-optimising, demand **±0.05**. Parameters: Ω_m ±0.005, H0 ±0.3, κ ±0.05, and
@@ -157,7 +157,7 @@ Anything outside these bands is a genuine discrepancy worth chasing.
 
 ## 5. CAMB stretch goal
 
-Separate job, `camb_checks.py`; do the background pipeline first, as you suggested.
+Separate job, `camb_checks.py`; run the background pipeline first.
 Environment of record **camb==1.6.6**. Configuration: `DarkEnergyPPF` with
 `set_w_a_table(a, w)`, table built from the Eq. (3) integrator on the same x-grid, prepended
 with (a = 10⁻⁶, w = −1), and **w capped at max(w, −15)** — the cap acts only where
@@ -169,7 +169,7 @@ spectrum (`set_initial_power_table`, 3000 log points over k = 10⁻⁶·⁵–10
 at 10⁻³⁰·As below k_cut), with R_s = 1.66×10²⁶ m = 5379 Mpc comoving and the two conventions
 k_cut = 1/R_s and π/R_s.
 
-## 6. Known approximations, complete list (the "missing pieces" you asked about)
+## 6. Known approximations (complete list)
 
 1. BAO likelihood diagonal (no D_M–D_H correlations).
 2. CMB prior diagonal, two observables only, ω_b fixed rather than a third Gaussian row.
