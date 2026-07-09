@@ -10,9 +10,9 @@ with a provably forced rise–peak–decline ordering and a fitted conversion ef
 the physical energy budget (kappa ~ 0.85). A six-model nested-sampling comparison on the same
 vector finds the mechanism statistically tied with LCDM and thawing quintessence and favoured
 over the w0–wa, wCDM, and running-vacuum alternatives (Delta lnZ ~ +2.5 to +2.7; paper Appendix D,
-validation/VALIDATION-README.md Sec. 9). The main analysis uses DESI DR1 BAO; a full refit against
+validation/VALIDATION-README.md Sec. 9). The main analysis uses DESI DR1 BAO; __a full refit against
 DESI DR2 (paper Appendix E) strengthens the preference (Delta chi2 ~ 6 -> 10 below LCDM) and makes
-the mechanism the evidence-preferred model of the six. The 2.8–4.2 sigma figure quoted in the paper
+the mechanism the evidence-preferred model of the six__. The 2.8–4.2 sigma figure quoted in the paper
 is DESI's own DR2 field-level significance.
 
 ## Contents
