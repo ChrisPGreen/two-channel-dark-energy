@@ -1,8 +1,6 @@
 # Changelog
 
-All notable changes to the paper and its validation package. The last public
-release is **v1.0.2** (https://github.com/ChrisPGreen/two-channel-dark-energy/tree/v1.0.2).
-
+All notable changes to the paper and its validation package.
 ## v1.1 — July 2026
 
 v1.1 adds Bayesian model selection and a DESI DR2 robustness cross-check. **The core
