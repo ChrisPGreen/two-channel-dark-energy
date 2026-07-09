@@ -1,5 +1,7 @@
-# Environment of record (versions printed in console-log-verification.txt)
+# Environment of record (versions printed in log-reproduce-dr1-full.txt)
 numpy
 scipy
 pandas
 camb==1.6.6   # required only for camb_checks.py (stretch goal)
+dynesty       # required only for bayes_evidence.py / bayes_evidence_suite.py (nested-sampling evidence)
+matplotlib    # required only for benchmark_plots.py (Step C comparison figures)

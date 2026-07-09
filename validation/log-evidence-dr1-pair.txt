@@ -1,0 +1,29 @@
+bayes_evidence.py — guard-fixed run, physical kappa in [0,1], single-threaded, nlive=500
+(2026-07-08). Supersedes the pre-fix run (see note at bottom).
+
+--> Two-Channel Mechanism: ln(Z) = -712.558 +/- 0.241
+--> empirical w0-wa model: ln(Z) = -715.245 +/- 0.282
+
+============================================================
+  FINAL BAYESIAN VERDICT
+============================================================
+Delta ln(Z) [Two-Channel Model - w0wa] = 2.687
+The Two-Channel Accretion mechanism is preferred by odds of 14.69 : 1
+Strength of Evidence: POSITIVE (bordering STRONG)
+============================================================
+
+Cross-check: the independent six-model suite (bayes_evidence_suite.py, same physical
+prior) gives ln(Z) = -712.534 (two-channel) and -715.030 (w0wa), Delta = +2.495. The
+two scripts agree within nested-sampling scatter; combined Delta ln Z(C - w0wa) ~ +2.6
++/- 0.4 -- POSITIVE, at the edge of STRONG on the Jeffreys scale. Report the number, not
+the single-run label (the two runs straddle the 2.5 positive/strong boundary).
+
+--------------------------------------------------------------------------------
+SUPERSEDED (pre-fix, kept for the record): the original run reported
+  Two-Channel ln(Z) = -714.848,  w0wa ln(Z) = -715.204,  Delta = +0.356 (INCONCLUSIVE).
+That +0.356 was BIASED LOW by a likelihood-guard bug: on scipy >= 1.11 the guard promoted
+scipy quad's benign roundoff/subdivision IntegrationWarnings to -inf, rejecting good points
+at the two-channel model's own best-fit region (its ln Z only; w0wa is analytic and
+unaffected -- it moved <0.05). Fixing the guard (RuntimeWarning-only + finite-chi2 check)
+raised the two-channel ln Z by ~+2.3 to the value above, confirmed independently by the
+six-model suite. See CHANGELOG v1.0.3 and VALIDATION-README.md Sec.9.

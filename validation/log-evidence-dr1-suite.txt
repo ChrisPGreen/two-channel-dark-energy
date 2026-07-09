@@ -1,0 +1,95 @@
+SN likelihood: 1580 SNe (expect 1580), full STAT+SYS covariance
+SN data loaded in main process: 1580 SNe (expect 1580)
+
+====================================================================
+  NESTED-SAMPLING EVIDENCE — MULTI-MODEL COMPARISON (PHYSICAL BOUND)
+  kappa prior: [0, 1]  |  nlive: 500  |  workers: 8
+  data: Planck distance priors + DESI DR1 BAO + Pantheon+ (1580 SNe)
+====================================================================
+
+Priors (shared: Om in [0.2, 0.45], H0 in [60, 76]; extra DE params below):
+  LCDM (w=-1)          k=2   (none)
+  wCDM (const w)       k=3   w[-2.5,0]
+  RVM (running vac)    k=3   nu[-0.05,0.05]
+  Quintessence         k=3   lambda[0,2]
+  w0wa (CPL)           k=4   w0[-2.5,0], wa[-4,3]
+  Two-Channel          k=5   mu0[0,3], n[0.5,12], kap[0,1]
+
+Executing run 1/6: LCDM (w=-1) (ndim=2) ...
+SN likelihood: 1580 SNe (expect 1580), full STAT+SYS covariance
+SN likelihood: 1580 SNe (expect 1580), full STAT+SYS covariance
+SN likelihood: 1580 SNe (expect 1580), full STAT+SYS covariance
+SN likelihood: 1580 SNe (expect 1580), full STAT+SYS covariance
+SN likelihood: 1580 SNe (expect 1580), full STAT+SYS covariance
+SN likelihood: 1580 SNe (expect 1580), full STAT+SYS covariance
+SN likelihood: 1580 SNe (expect 1580), full STAT+SYS covariance
+SN likelihood: 1580 SNe (expect 1580), full STAT+SYS covariance
+4356it [00:44, 97.48it/s, +500 | bound: 10 | nc: 1 | ncall: 22955 | eff(%): 21.625 | loglstar:   -inf < -704.692 <    inf | logz: -712.553 +/-  0.117 | dlogz:  0.001 >  0.509]
+--> LCDM (w=-1): ln(Z) = -712.553 +/- 0.218   chi2min = 1409.38
+
+Executing run 2/6: wCDM (const w) (ndim=3) ...
+6002it [01:06, 90.34it/s, +500 | bound: 26 | nc: 1 | ncall: 31684 | eff(%): 20.850 | loglstar:   -inf < -704.007 <    inf | logz: -715.222 +/-  0.146 | dlogz:  0.001 >  0.509]
+--> wCDM (const w): ln(Z) = -715.222 +/- 0.260   chi2min = 1408.01
+
+Executing run 3/6: RVM (running vac) (ndim=3) ...
+6070it [01:11, 85.06it/s, +500 | bound: 30 | nc: 1 | ncall: 33122 | eff(%): 20.140 | loglstar:   -inf < -703.887 <    inf | logz: -715.244 +/-  0.148 | dlogz:  0.001 >  0.509]
+--> RVM (running vac): ln(Z) = -715.244 +/- 0.262   chi2min = 1407.77
+
+4894it [21:28,  3.80it/s, +500 | bound: 22 | nc: 1 | ncall: 29561 | eff(%): 18.561 | loglstar:   -inf < -703.422 <    inf | logz: -712.433 +/-  0.130 | dlogz:  0.001 >  0.509]
+--> Quintessence: ln(Z) = -712.433 +/- 0.232   chi2min = 1406.84
+
+7018it [04:29, 26.03it/s, +500 | bound: 109 | nc: 1 | ncall: 91436 | eff(%):  8.267 | loglstar:   -inf < -701.730 <    inf | logz: -715.030 +/-    nan | dlogz:  0.001 >  0.509]
+--> w0wa (CPL): ln(Z) = -715.030 +/- 0.278   chi2min = 1403.46
+
+Executing run 6/6: Two-Channel (ndim=5) ...
+5723it [1:53:53,  1.19s/it, +500 | bound: 166 | nc: 1 | ncall: 168062 | eff(%):  3.714 | loglstar:   -inf < -701.717 <    inf | logz: -712.534 +/-  0.146 | dlogz:  0.001 >  0.509]
+--> Two-Channel: ln(Z) = -712.534 +/- 0.240   chi2min = 1403.43
+
+
+==============================================================================
+  TABLE 1 — EVIDENCE RANKING
+==============================================================================
+model                 k   chi2min       ln(Z)    +/-  d lnZ vs best
+------------------------------------------------------------------------------
+Quintessence          3   1406.84    -712.433  0.232          0.000  <--best
+Two-Channel           5   1403.43    -712.534  0.240         -0.101 (ref)
+LCDM (w=-1)           2   1409.38    -712.553  0.218         -0.119
+w0wa (CPL)            4   1403.46    -715.030  0.278         -2.596
+wCDM (const w)        3   1408.01    -715.222  0.260         -2.789
+RVM (running vac)     3   1407.77    -715.244  0.262         -2.811
+------------------------------------------------------------------------------
+chi2min = best-fit chi2 (frequentist); ln(Z) = Bayesian evidence, Occam-
+penalised for prior volume. d lnZ is measured DOWN from the best model.
+Note the two axes can disagree: a lower chi2min can still lose on ln(Z) if
+it cost extra parameters/prior volume to get there.
+
+========================================================================
+  TABLE 2 — BAYESIAN MODEL SELECTION: TWO-CHANNEL vs EACH RIVAL
+  Delta ln Z = ln Z(two-channel) - ln Z(rival)   [+ favours two-channel]
+  B = Bayes factor (posterior odds under equal model priors)
+========================================================================
+rival                   d lnZ    +/-         B  evidence (Jeffreys)
+------------------------------------------------------------------------
+LCDM (w=-1)             0.018  0.324      1.02  inconclusive (indistinguishable)
+wCDM (const w)          2.688  0.354     14.70  favours two-channel (strong)
+RVM (running vac)       2.710  0.355     15.02  favours two-channel (strong)
+Quintessence           -0.101  0.334      1.11  inconclusive (indistinguishable)
+w0wa (CPL)              2.495  0.367     12.12  favours two-channel (positive)
+------------------------------------------------------------------------
+
+SUMMARY — Bayesian evidence for the two-channel mechanism (wide kappa prior):
+  data favour two-channel over    : wCDM (const w), RVM (running vac), w0wa (CPL)
+  indistinguishable from          : LCDM (w=-1), Quintessence
+  data disfavour two-channel vs   : none
+
+Jeffreys scale on |Delta ln Z|: < 1 inconclusive; 1-2.5 positive; 2.5-5
+strong; > 5 decisive. Being evidentially indistinguishable from the empirical
+w0wa form is the intended result -- the mechanism reproduces the evolving-dark-
+energy preference at the same fit quality, but from a physical origin for w(z).
+========================================================================
+
+PRIOR: kappa in [0, 1] -- the PHYSICAL efficiency bound (headline result).
+Cross-check Delta ln Z(two-channel - w0wa) against the first-pass
+bayes_evidence.py value of +0.356 (same physical prior).
+To run the unphysical stress test, set KAP_MAX = 40.0 at the top and re-run;
+the two-channel evidence should DROP by ~ln(40)~3.7 (Occam on impossible volume).
